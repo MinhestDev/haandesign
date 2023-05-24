@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>ChatGPT</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<!-- jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<!-- JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+	<div class="page-container">
+		<div class="page-content-wrap">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel panel-default">
+						<div class="panel-header">
+							<h3>
+								<center>Giả lập ChatGPT</center>
+							</h3>
+						</div>
+						<div class="panel-body">
+							<div class="form-group">
+								<label for="usr">Hãy đặt cho tôi một câu hỏi</label>
+								<input type="text" class="form-control" id="question" value="Công ty Hà An Design ở đâu?">
+							</div>
+							<div class="form-group">
+								<label for="pwd">Đây là câu trả lời:</label>
+								<textarea id="answer" class="form-control" rows="5"></textarea>
+							</div>
+						</div>
+						<div class="panel-footer">
+							<button type="button" class="btn btn-primary" id="send">Gửi</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		$('#send').click(function() {
+			generateCompletion();
+		});
+
+		const apiKey = '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';
+
+		async function generateCompletion(){
+			const response = await fetch('https://api.openai.com/vi/engines/davinci/completions',{
+				method: 'POST',
+				headers: {
+					'Authorization' : 'Bearer ' + apiKey,
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					prompt: $('#question').val(),
+					temperature: 0.5,
+					max_tokens: 20,
+					top_p: 1,
+					frequency_penalty: 0,
+					presence_penalty: 0,
+				}),
+			});
+
+			const completions = await response.json();
+			$('#answer').val(completions.choices[0].text.trim())
+		}
+	</script>
+</body>
+
+</html>
